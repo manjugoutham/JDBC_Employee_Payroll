@@ -30,35 +30,34 @@ public class Employee_payrolljdbc {
 		this.salaay = salaay;
 	}
 
-	public static void refactorjdbcPrepardstatement() {
-		// Connection conn = null;
-
-		String empnum, phonenum;
-		PreparedStatement pstmt = null;
-		ResultSet rs;
-
+public static List<Employee_payrolljdbc> retrieveEmployeeallDatarange(LocalDate start,LocalDate end) {
+		
+		String query = String.format("select * FROM employee_payrolls where start_date BETWEEN '%s' AND '%s';",Date.valueOf(start), Date.valueOf(end));
+		List<Employee_payrolljdbc> employee = new ArrayList<>();
 		try {
+			
+			System.out.println("Driver loaded!...");
 			Connection con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-			pstmt = con
-					.prepareStatement("SELECT EmployeeName, Phonenumber FROM employee_payrolls WHERE EmployeeName=?");
-			pstmt.setString(1, "Gouthum");
-
-			rs = pstmt.executeQuery();
-			while (rs.next()) {
-				empnum = rs.getString(1);
-				phonenum = rs.getString(2);
-				System.out.println("EmployeeName = " + empnum + " \nPhoneNumber = " + phonenum);
-
-			}
+			System.out.println("connection success");
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			while (rs.next())
+				list.add(new Employee_payrolljdbc(rs.getString("EmployeeName"), rs.getInt("salary")));
+			System.out.println(list.size());
+			employee.forEach(System.out::println);
+			stmt.close();
 			rs.close();
-			pstmt.close();
+			con.close();
+			
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-	public static void main(String args[]) {
-
-		refactorjdbcPrepardstatement();
+		return list;
+		
 	}
 }
