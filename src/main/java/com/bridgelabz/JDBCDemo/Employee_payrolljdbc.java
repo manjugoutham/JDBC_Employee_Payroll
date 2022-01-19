@@ -1,8 +1,13 @@
 package com.bridgelabz.JDBCDemo;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,22 +30,30 @@ public class Employee_payrolljdbc {
 		this.salaay = salaay;
 	}
 
-	public static void jdbcconncetions() {
+	public static void retrieveEmployeePayroll() {
 
 		try {
+
 			Class.forName("com.mysql.jdbc.Driver");
 			System.out.println("Driver loaded!...");
 			Connection con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-			System.out.println("Connection success!..");
+			System.out.println("connection success");
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select * from employee_payrolls");
+			while (rs.next())
+				list.add(new Employee_payrolljdbc(rs.getString("EmployeeName"), rs.getInt("salary")));
+			// System.out.println(rs.getString("EmployeeName") + " " + rs.getInt("salary"));
+			System.out.println(list.size());
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	public static void main(String args[])
-	{
-		jdbcconncetions();
+
+	public static void main(String args[]) {
+
+		retrieveEmployeePayroll();
 	}
 }
