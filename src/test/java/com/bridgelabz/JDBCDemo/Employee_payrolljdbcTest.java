@@ -10,12 +10,12 @@ import org.junit.Test;
 public class Employee_payrolljdbcTest {
 	
 	@Test
-	public void updateSalaryTest()
+	public void usingjdbcPrepardstatementTest()
 	{
-		Employee_payrolljdbc employee = new Employee_payrolljdbc();
+		Employee_payrolljdbc employeetest = new Employee_payrolljdbc();
 		//employee.jdbcconncetions();
-		List<Employee_payrolljdbc> employeetest = employee.updateSalary("Terissa", 3000000);
-		Assert.assertEquals(0, employeetest.size());
+		boolean result = employeetest.usingjdbcPrepardstatement(3000000,"Terissa");
+		Assert.assertEquals(true, result);
 	}
 	
 }

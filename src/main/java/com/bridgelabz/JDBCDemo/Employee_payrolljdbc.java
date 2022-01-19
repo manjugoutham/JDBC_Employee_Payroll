@@ -30,45 +30,38 @@ public class Employee_payrolljdbc {
 		this.salaay = salaay;
 	}
 
-	public static void jdbcconncetions() {
+	public static boolean usingjdbcPrepardstatement(int salary, String name) {
+		// Connection conn = null;
+		PreparedStatement preparedStatement = null;
 
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			System.out.println("Driver loaded!...");
 			Connection con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static List<Employee_payrolljdbc> updateSalary(String name, int salary) {
-		try {
-
-			Class.forName("com.mysql.jdbc.Driver");
-			// System.out.println("Driver loaded!...");
-			Connection con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-			// System.out.println("connection success");
 			Statement stmt = con.createStatement();
-			int rs = stmt.executeUpdate("UPDATE employee_payrolls SET  salary = " + salary + "  WHERE EmployeeName ='" + name + "';");
+			String query = "update employee_payrolls set " + "salary = ? " + "where EmployeeName = ? ";
+			preparedStatement = con.prepareStatement(query);
 
-			jdbcconncetions();
+			// set values
+			preparedStatement.setInt(1, salary);
+			preparedStatement.setString(2, name);
+
+			// execute query
+			preparedStatement.executeUpdate();
+
+			// close connection
+			preparedStatement.close();
 			con.close();
-		} catch (SQLException e) {
+
+			System.out.println("Record updated successfully.");
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		// listDrivers()
-		catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		return list;
+		return true;
 	}
+
 
 	public static void main(String args[]) {
 
-		updateSalary("Terissa", 3000000);
-		jdbcconncetions();
-
+		usingjdbcPrepardstatement(60000, "Gouthum");
 	}
 }
