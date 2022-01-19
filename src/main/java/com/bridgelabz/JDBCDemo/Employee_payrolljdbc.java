@@ -1,13 +1,10 @@
 package com.bridgelabz.JDBCDemo;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,34 +27,31 @@ public class Employee_payrolljdbc {
 		this.salaay = salaay;
 	}
 
-public static List<Employee_payrolljdbc> retrieveEmployeeallDatarange(LocalDate start,LocalDate end) {
-		
-		String query = String.format("select * FROM employee_payrolls where start_date BETWEEN '%s' AND '%s';",Date.valueOf(start), Date.valueOf(end));
-		List<Employee_payrolljdbc> employee = new ArrayList<>();
+	public static boolean findsumavgminmax() {
 		try {
-			
+
+			Class.forName("com.mysql.jdbc.Driver");
 			System.out.println("Driver loaded!...");
 			Connection con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 			System.out.println("connection success");
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
-			while (rs.next())
-				list.add(new Employee_payrolljdbc(rs.getString("EmployeeName"), rs.getInt("salary")));
-			System.out.println(list.size());
-			employee.forEach(System.out::println);
-			stmt.close();
-			rs.close();
-			con.close();
+			ResultSet rs = stmt.executeQuery("SELECT gender,SUM(salary),avg(salary),min(salary),max(salary),count(salary) FROM employee_payrolls GROUP BY gender;");
 			
-			Class.forName("com.mysql.jdbc.Driver");
+			while (rs.next())
+			 System.out.println(rs.getString("gender") + " Sum==>" + rs.getInt("SUM(salary)" ) + " Avg==> "+rs.getInt("avg(salary)")  + " Min==> "+rs.getInt("min(salary)") + " Max==> "+rs.getInt("max(salary)") + " Count==> "+rs.getInt("count(salary)"));
+			con.close();
+		} catch (SQLException e) {
+			// Handle errors for JDBC
+			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
-		return list;
-		
+		return true;
+	}
+
+	public static void main(String args[]) {
+
+		findsumavgminmax();
 	}
 }
