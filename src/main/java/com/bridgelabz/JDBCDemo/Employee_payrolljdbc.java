@@ -30,38 +30,35 @@ public class Employee_payrolljdbc {
 		this.salaay = salaay;
 	}
 
-	public static boolean usingjdbcPrepardstatement(int salary, String name) {
+	public static void refactorjdbcPrepardstatement() {
 		// Connection conn = null;
-		PreparedStatement preparedStatement = null;
+
+		String empnum, phonenum;
+		PreparedStatement pstmt = null;
+		ResultSet rs;
 
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-			Statement stmt = con.createStatement();
-			String query = "update employee_payrolls set " + "salary = ? " + "where EmployeeName = ? ";
-			preparedStatement = con.prepareStatement(query);
+			pstmt = con
+					.prepareStatement("SELECT EmployeeName, Phonenumber FROM employee_payrolls WHERE EmployeeName=?");
+			pstmt.setString(1, "Gouthum");
 
-			// set values
-			preparedStatement.setInt(1, salary);
-			preparedStatement.setString(2, name);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				empnum = rs.getString(1);
+				phonenum = rs.getString(2);
+				System.out.println("EmployeeName = " + empnum + " \nPhoneNumber = " + phonenum);
 
-			// execute query
-			preparedStatement.executeUpdate();
-
-			// close connection
-			preparedStatement.close();
-			con.close();
-
-			System.out.println("Record updated successfully.");
-		} catch (Exception e) {
+			}
+			rs.close();
+			pstmt.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return true;
 	}
-
-
 	public static void main(String args[]) {
 
-		usingjdbcPrepardstatement(60000, "Gouthum");
+		refactorjdbcPrepardstatement();
 	}
 }
