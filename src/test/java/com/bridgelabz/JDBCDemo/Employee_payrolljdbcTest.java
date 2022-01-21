@@ -38,7 +38,6 @@ public class Employee_payrolljdbcTest {
 		Assert.assertEquals(2, updatedRowsInDB.size());  
 	}
 	
-	//UC-7 
 	@Test
 	public void addNewEmployeeToPayrollTest() throws SQLException
 	{
