@@ -13,9 +13,8 @@ public class Employee_payrolljdbcTest {
 	public void updateSalaryTest()
 	{
 		Employee_payrolljdbc employee = new Employee_payrolljdbc();
-		//employee.jdbcconncetions();
 		List<Employee_payrolljdbc> employeetest = employee.updateSalary("Terissa", 3000);
-		Assert.assertEquals(4, employeetest.size());
+		Assert.assertEquals(2, employeetest.size());
 	}
 	
 	
@@ -38,5 +37,24 @@ public class Employee_payrolljdbcTest {
 		List<Employee_payrolljdbc> updatedRowsInDB = emplpyee.retrieveEmployeeallDatarange(startDate,endDate);
 		Assert.assertEquals(2, updatedRowsInDB.size());  
 	}
+	
+	//UC-7 
+	@Test
+	public void addNewEmployeeToPayrollTest() throws SQLException
+	{
+		Employee_payrolljdbc employee = new Employee_payrolljdbc();
+		LocalDate start_date = LocalDate.of(2020,01,05);
+		int addemployee = employee.addNewEmployeeToPayroll(4,"AllenRobin","9876543221","Sales","M",12000.0f,2800.00f,1500.0f,1000.00f,5000.00f,"Bangarpet",start_date,"kolar","USA",50000);
+		Assert.assertEquals(1, addemployee);
+	}
 
+	
+//	@Test
+//	public void addToPayrollDetailsToThePayrollTest() throws SQLException
+//	{
+//		Employee_payrolljdbc employee = new Employee_payrolljdbc();
+//		int addemployee = employee.addToPayrollDetailsToThePayroll(5,"AllenRobin","Delhi",3500);
+//		Assert.assertEquals(1, addemployee);
+//	}
+//	
 }

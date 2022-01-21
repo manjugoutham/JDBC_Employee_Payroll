@@ -56,7 +56,7 @@ public class Employee_payrolljdbc {
 			while (rs.next())
 				list.add(new Employee_payrolljdbc(rs.getString("EmployeeName"), rs.getInt("salary")));
 			// System.out.println(rs.getString("EmployeeName") + " " + rs.getInt("salary"));
-//			System.out.println(list.size());
+			System.out.println(list.size());
 			con.close();
 		} catch (SQLException e) {
 			// Handle errors for JDBC
@@ -204,7 +204,67 @@ public class Employee_payrolljdbc {
 			e.printStackTrace();
 		}
 	}
+	
+//	public int addNewEmployeeToPayroll(int i, String string, String string2, String string3, String string4, float f,
+//			float g, float h, float j, float k, String string5, String string6, String string7, int l) {
+//		// TODO Auto-generated method stub
+//		return 0;
+//	}
 
+
+	public int addNewEmployeeToPayroll(int EmployeeID, String EmployeeName, String Phonenumber, String Department,
+			String gender, float BasicPay, float Deductions, float TaxablePay, float Tax, float NetPay, String address,LocalDate start_date, String City, String Country, int salary) throws SQLException {
+		// TODO Auto-generated method stub
+		String query = String.format(
+					"INSERT INTO employee_payrolls (`EmployeeID`, `EmployeeName`,`Phonenumber`,`Department`,`gender`, `BasicPay`, `Deductions`,`TaxablePay`, `Tax`,`NetPay`,`address`,`start_date`,`City`,`Country`,`salary`) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')",
+					EmployeeID, EmployeeName, Phonenumber, Department, gender, BasicPay, Deductions, TaxablePay, Tax, NetPay,address ,start_date ,City,Country,salary);
+			System.out.println(query);
+			Connection con = null;
+
+			int rs = 0;
+			try {
+
+				con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+				con.setAutoCommit(false);
+				Statement statement = con.createStatement();
+				rs = statement.executeUpdate(query);
+
+				con.commit();
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				con.rollback();
+			}
+			return rs;
+	}
+	
+	public int addToPayrollDetailsToThePayroll(int employee_id, String employeeName, String employee_address, int salary) throws SQLException
+	{
+			String query = String.format(
+					"INSERT INTO employee (`employee_id`, `employeeName`,`employee_address`,`salary`) VALUES ('%s','%s','%s','%s')",employee_id, employeeName, employee_address, salary);
+			//String query1 = String.format(
+				//	"INSERT INTO employee (`employee_id`, `employeeName`,`employee_address`,`salary`) VALUES ('%s','%s','%s','%s')",employee_id, employeeName, employee_address, salary);
+			System.out.println(query);
+			//System.out.println(query1);
+			Connection con = null;
+			int rs = 0;
+			try {
+
+				con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+				con.setAutoCommit(false);
+				Statement statement = con.createStatement();
+				rs = statement.executeUpdate(query);
+
+				con.commit();
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				con.rollback();
+			}
+			return rs;
+	}
+	
+	
 	public static void main(String args[]) {
 
 		// jdbcconncetions();
@@ -217,4 +277,5 @@ public class Employee_payrolljdbc {
 		// findsumavgminmax();
 		// retrieveEmployeeallDatarange(2021-10-25,2022-01-10);
 	}
+
 }
